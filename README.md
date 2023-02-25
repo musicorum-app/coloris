@@ -8,12 +8,13 @@ configuration, and more.
 overly complex hello world:
 
 ```js
-import {log, metrics} from '@musicorum/coloris'
+import {log, metrics, cache} from '@musicorum/coloris'
 
+await cache.start()
 metrics.setAppName('test')
 
 const metric = metrics.register('counter', {
-    name: 'http_requests_total',
+    name: 'server.totalRequests',
     description: 'total number of http requests'
 })
 
@@ -29,3 +30,7 @@ server.get('/metrics', (req, res) => {
 
 server.listen(3000)
 ```
+
+## what does it look like?
+
+![example](https://i.imgur.com/h46s283.jpg)

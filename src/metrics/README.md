@@ -21,9 +21,14 @@ metrics.get('database.savedTracks').increase()
 // or...
 metric.increase()
 
-const checkpoint = metrics.trace('database.myHeavyOperation')
+const checkpoint = metrics.mark('database.myHeavyOperation')
 await someHeavyOperation()
+
+const mark = checkpoint.mark('yetAnotherOperation')
+await anotherOperation()
+mark.done()
+
 // this will automatically measure the time between the checkpoint creation and the call to this function
 // if the app is not running in production, it will also log the time it took to execute the operation
-checkpoint()
+checkpoint.done()
 ```

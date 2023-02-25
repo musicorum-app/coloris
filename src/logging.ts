@@ -21,7 +21,7 @@ const colorMapping: LevelColor = {
 }
 
 
-const log = (level: LogLevel, scope: string, message: string) => {
+const log = (level: LogLevel, scope: string, message: string, returnText?: boolean) => {
   const date = new Date()
   const asciiColor = colorMapping[level]
 
@@ -29,6 +29,7 @@ const log = (level: LogLevel, scope: string, message: string) => {
   const thread = `${green}pid ${process.pid}`
 
   const text = `${greyColor}${time}${reset} ${thread}${reset} ${asciiColor}[${level}]${reset} (${italics}${scope}${reset}): ${message}`
+  if (returnText) return text
 
   switch (level) {
     case 'INFO':
@@ -50,12 +51,12 @@ const pad = (str: number, length = 2) => {
   return '0'.repeat(length - str.toString().length) + str
 }
 
-export const info = (scope: string, message: string) => log('INFO', scope, message)
+export const info = (scope: string, message: string, returnText?: boolean) => log('INFO', scope, message, returnText)
 export const warn = (scope: string, message: string) => log('WARN', scope, message)
 export const error = (scope: string, message: string) => log('ERROR', scope, message)
 export const debug = (scope: string, message: string) => isDevelopment && log('DEBUG', scope, message)
 
-export const bold = (str: string) => `\x1b[1m${str}${reset}`
+export const bold = (str: string, r = true) => `\x1b[1m${str}${r ? reset : ''}`
 export const italic = (str: string) => `\x1b[3m${str}${reset}`
 export const underline = (str: string) => `\x1b[4m${str}${reset}`
 export const strikethrough = (str: string) => `\x1b[9m${str}${reset}`
@@ -68,4 +69,9 @@ export const rainbow = (str: string) => {
     result += colors[i % colors.length] + str[i]
   }
   return result + reset
+}
+
+// adds 2 spaces to every line of the stack and makes it grey
+export const stack = (stack: string) => {
+  return stack.split('\n').map(line => `  ${grey(line)}`).join('\n')
 }

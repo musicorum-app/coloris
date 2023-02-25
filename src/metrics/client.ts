@@ -1,5 +1,6 @@
 import { defaultValues, Metric, MetricConfiguration, MetricTypeByName } from './types.js'
 import { MetricWrapper } from './wrapper.js'
+import { MetricTimeTracer } from './trace.js'
 
 export class MetricsClient {
   public registry = new Map<string, Metric<any>>()
@@ -20,6 +21,10 @@ export class MetricsClient {
     this.registry.set(config.name, data)
 
     return new MetricWrapper(data, this)
+  }
+
+  mark (label: string) {
+    return MetricTimeTracer.mark(label)
   }
 
   get (name: string) {

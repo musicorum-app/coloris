@@ -11,15 +11,13 @@ export class InMemoryBackend extends CachingBackend {
     return this.cache[key]
   }
 
-  async setTTL (key: string, value: any, ttl: number) {
+  async set (key: string, value: any, ttlInSeconds?: number) {
     this.cache[key] = value
-    setTimeout(() => {
-      delete this.cache[key]
-    }, ttl)
-  }
-
-  async set (key: string, value: any) {
-    this.cache[key] = value
+    if (ttlInSeconds) {
+      setTimeout(() => {
+        delete this.cache[key]
+      }, ttlInSeconds * 1000)
+    }
   }
 
   async delete (key: string) {
