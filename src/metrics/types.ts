@@ -1,6 +1,7 @@
 export interface MetricConfiguration {
   name: string
   description: string
+  buckets?: number[]
 }
 
 export interface Metric<T> extends MetricConfiguration {
@@ -8,20 +9,18 @@ export interface Metric<T> extends MetricConfiguration {
   type: keyof MetricTypeByName
 }
 
-export interface Counter extends Metric<number> {
-  increment: (value: number) => void
-}
-
-export type MetricInfo<M extends MetricConfiguration, T> = M
+export type MetricInfo<T> = T
 
 export type MetricTypeByName = {
-  'counter': MetricInfo<Counter, number>
+  'counter': MetricInfo<number>
+  'histogram': MetricInfo<undefined>
 }
 
 type MetricDefaultValues = {
-  [id in keyof MetricTypeByName]: MetricTypeByName[id] extends MetricInfo<any, infer T> ? T : never
+  [id in keyof MetricTypeByName]: MetricTypeByName[id] extends MetricInfo<infer T> ? T : never
 }
 
 export const defaultValues: MetricDefaultValues = {
-  counter: 0
+  counter: 0,
+  histogram: undefined
 }

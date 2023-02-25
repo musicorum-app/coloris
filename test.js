@@ -9,8 +9,23 @@ const metric = metrics.register('counter', {
     name: 'test',
     description: 'test metric'
 })
+
 metric.increment()
 metrics.get('test').increment()
+
+const hist = metrics.register('histogram', {
+    name: 'testhi',
+    description: 'test metric'
+})
+
+log.info('test.main', 'testing histogram capabilities')
+hist.observe()
+hist.end()
+hist.observe()
+await sleep(5000)
+hist.end()
+log.info('test.main', 'testing histogram capabilities done')
+console.log(log.grey(metrics.toPrometheus()))
 
 await cache.set('test', 'hello world')
 await cache.set('objTest', {hello: 'world'})
