@@ -1,6 +1,6 @@
 {
   "name": "@musicorum/coloris",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "an all-rounder back-end framework for musicorum services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
